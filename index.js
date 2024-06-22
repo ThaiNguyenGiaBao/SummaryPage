@@ -7,7 +7,7 @@ const octokit = new Octokit({
   auth: process.env.GITHUB_TOKEN,
 });
 
-const username = "Huy-DNA";
+const username = "ThaiNguyenGiaBao";
 const data = {};
 
 async function getUserInfo(username) {
