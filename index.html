@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Summary Card</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .card {
+      background: white;
+      padding: 20px;
+      margin: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      width: 300px;
+    }
+    .card img {
+      width: 100%;
+      border-radius: 8px;
+    }
+    .card h2, .card p {
+      margin: 10px 0;
+    }
+    .card .repo {
+      border-top: 1px solid #ddd;
+      margin-top: 10px;
+      padding-top: 10px;
+    }
+    .card .repo:last-child {
+      border-bottom: 1px solid #ddd;
+      margin-bottom: 10px;
+      padding-bottom: 10px;
+    }
+    .languages {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .languages span {
+      background-color: #007bff;
+      color: white;
+      border-radius: 4px;
+      padding: 2px 6px;
+      margin: 2px;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card" id="summary-card">
+  <img src="" alt="Avatar" id="avatar">
+  <h2 id="name"></h2>
+  <p id="bio"></p>
+  <p><strong>Email:</strong> <span id="email"></span></p>
+  <p><strong>Company:</strong> <span id="company"></span></p>
+  <p><strong>Location:</strong> <span id="location"></span></p>
+  <p><strong>Blog:</strong> <a href="" id="blog" target="_blank">Visit Blog</a></p>
+  <p><strong>Followers:</strong> <span id="followers"></span> | <strong>Following:</strong> <span id="following"></span></p>
+
+  <div id="repos">
+    <h3>Repositories</h3>
+  </div>
+
+  <div id="organizations">
+    <h3>Organizations</h3>
+  </div>
+
+  <div id="languages">
+    <h3>Languages</h3>
+  </div>
+</div>
+
+<script>
+  // Fetch JSON data
+  fetch('data.json')
+    .then(response => response.json())
+    .then(userData => {
+      console.log(userData);
+
+      // Populate card with data
+      document.getElementById('avatar').src = userData.avatar;
+      document.getElementById('name').textContent = userData.name;
+      document.getElementById('bio').textContent = userData.bio;
+      document.getElementById('email').textContent = userData.email;
+      document.getElementById('company').textContent = userData.company;
+      document.getElementById('location').textContent = userData.location;
+      document.getElementById('blog').href = userData.blog;
+      document.getElementById('followers').textContent = userData.followers;
+      document.getElementById('following').textContent = userData.following;
+
+      // Repositories
+      const reposContainer = document.getElementById('repos');
+      userData.repos.forEach(repo => {
+        const repoDiv = document.createElement('div');
+        repoDiv.className = 'repo';
+        repoDiv.innerHTML = `<h4>${repo.name}</h4><p>${repo.description || 'No description'}</p><p>⭐ ${repo.stars} | 🍴 ${repo.forks}</p>`;
+        reposContainer.appendChild(repoDiv);
+      });
+
+      // Organizations
+      const orgsContainer = document.getElementById('organizations');
+      userData.organizations.forEach(org => {
+        const orgDiv = document.createElement('div');
+        orgDiv.className = 'org';
+        orgDiv.innerHTML = `<img src="${org.avatar}" alt="${org.name}" width="30" height="30"> <span>${org.name}</span>`;
+        orgsContainer.appendChild(orgDiv);
+      });
+
+      // Languages
+      const languagesContainer = document.getElementById('languages');
+      Object.keys(userData.languages).forEach(language => {
+        const langSpan = document.createElement('span');
+        langSpan.textContent = `${language} (${userData.languages[language]})`;
+        languagesContainer.appendChild(langSpan);
+      });
+    })
+    .catch(error => console.error('Error loading JSON data:', error));
+</script>
+
+</body>
+</html>
